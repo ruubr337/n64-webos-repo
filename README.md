@@ -1,10 +1,27 @@
-# N64 USB Launcher for webOS
+<p align="center">
+  <img src="logo.png" alt="REPO launcher" width="180">
+</p>
 
-[Português](README.pt-BR.md) · English
+<h1 align="center">REPO launcher</h1>
 
-A small launcher app for LG webOS TVs. It finds Nintendo 64 (`.z64`, `.n64`, `.v64`) and Game Boy Advance (`.gba`) ROMs on a USB drive or in the TV's storage, lets you pick one with the TV remote, and starts [RetroArch](https://www.retroarch.com/) with that ROM already loaded. If you have no USB drive, it can also download your own ROM from a link (Dropbox, Google Drive or a direct HTTPS link).
+<p align="center">
+  A simple game launcher for LG webOS TVs.<br>
+  Pick a Nintendo 64 or Game Boy Advance ROM with your remote and play it in RetroArch.
+</p>
 
-> **Status: experimental.** The package has been checked, but the app has not been validated on every TV model or webOS version. Expect rough edges and please report what you find.
+<p align="center">
+  <a href="../../releases/latest"><b>Download the latest .ipk</b></a> · English · <a href="README.pt-BR.md">Português</a>
+</p>
+
+> **Status: experimental.** The package and its scripts have been tested in a simulated environment, but not on every TV model or webOS version. Expect rough edges, and please report what you find.
+
+## Highlights
+
+- **One screen, all your games.** ROMs appear as cards with a system badge (N64 or GBA), navigated with the remote's arrow keys.
+- **Plays from a USB drive or from a link.** No USB drive? Press Blue, type a link to your own ROM, and the app downloads it for you. Dropbox, Google Drive and direct HTTPS links work, and `.zip` files are unpacked.
+- **Picks the right core by itself.** N64 ROMs open with Mupen64Plus-Next, GBA ROMs with mGBA.
+- **Auto-start.** Turn it on once and the app opens your last game after a 3-second countdown.
+- **Remote-friendly.** Everything is mapped to the arrows, OK, Back and the four color keys.
 
 ## Legal notice: no ROMs
 
@@ -14,64 +31,55 @@ A small launcher app for LG webOS TVs. It finds Nintendo 64 (`.z64`, `.n64`, `.v
 - Do not ask for ROMs in issues or discussions, and do not post links to them. Such requests will be ignored or removed.
 - Copyright law differs between countries. You are responsible for knowing and following the law where you live.
 
-## What it does
-
-1. Looks for `.z64`, `.n64`, `.v64` and `.gba` files on the USB drive (`/tmp/usb`), in `/media/internal` and in `/media/developer/roms` (where downloads are saved).
-2. Shows the results in a list you can browse with the remote. The last ROM you played is preselected.
-3. Runs RetroArch with the right core for the system (N64 or GBA) and the selected ROM.
-
-This app is **not an emulator**. It is only a shortcut. The emulation is done by RetroArch and libretro cores such as Mupen64Plus-Next (N64) and mGBA (GBA).
-
 ## Requirements
 
 | Requirement | Notes |
 |---|---|
-| LG TV with webOS | Rooted, with the [Homebrew Channel](https://www.webosbrew.org/) installed |
-| RetroArch for webOS | App id `com.retroarch.webos`, available from the Homebrew Channel |
-| Libretro cores | Built for ARM/webOS: `mupen64plus_next_libretro.so` for N64 and `mgba_libretro.so` for GBA. Install them from RetroArch (Load Core → Download a Core). **Not included** |
-| Your ROMs | On a USB drive (FAT32 or exFAT is the safest choice), or download them from a link (see below) |
+| LG TV with webOS | Rooted. The launcher needs root to find ROMs and to start RetroArch, and it uses the root command service that the webOS homebrew tools install when a TV is rooted |
+| [RetroArch for webOS](https://repo.webosbrew.org/apps/com.retroarch.webos) | App id `com.retroarch.webos` |
+| Libretro cores | `mupen64plus_next_libretro.so` (N64) and `mgba_libretro.so` (GBA). Install them from RetroArch: **Load Core → Download a Core**. Not included |
+| Your ROMs | On a USB drive (FAT32 or exFAT is the safest choice), or downloaded from a link (see below) |
 
-Root is required because the launcher runs a shell command through the Homebrew Channel service. Without root, only the "open RetroArch" button works.
+## Install
 
-## Installation
+1. Go to the [Releases page](../../releases/latest) and download the `.ipk` file.
+2. Install it on your TV with the [webOS Dev Manager](https://github.com/webosbrew/dev-manager-desktop) (drag the file in and press Install), or from a terminal:
 
-1. On the TV, open the Homebrew Channel.
-2. Go to **Settings → Add repository**.
-3. Enter:
-
-   ```
-   https://ruubr337.github.io/n64-webos-repo/api/apps.json
+   ```sh
+   ares-install com.user.n64usblauncher_1.3.0_all.ipk -d <your-tv>
    ```
 
-4. Find **N64 USB Launcher** in the app list and install it.
+3. Open **REPO launcher** from the TV's app list.
 
-You can also download the `.ipk` from the `ipks/` folder and install it with the [webOS Dev Manager](https://github.com/webosbrew/dev-manager-desktop) or `ares-install`.
+## Use
 
-## Usage
-
-Plug in the USB drive, open **N64 USB Launcher**, pick a ROM, and press OK.
+Plug in a USB drive (or download a ROM, see below), open the app, pick a game, and press OK.
 
 | Remote key | Action |
 |---|---|
-| Up / Down | Choose a ROM |
+| Arrow keys | Move between games |
 | OK | Play |
 | Red | Rescan for ROMs |
 | Green | Open RetroArch without a ROM |
-| Yellow | Toggle auto-start: next time the app opens the last ROM after 3 seconds (any key cancels) |
+| Yellow | Turn auto-start on or off |
 | Blue | Download a ROM from a link |
 | Back | Exit |
 
 ### Download a ROM from a link
 
-No USB drive? Press **Blue**, type a public link to **your own** ROM file, and press OK.
+Press **Blue**, type a public link to **your own** ROM file, and press OK. The progress is shown on screen, and the ROM appears in the list when it finishes.
 
-- **Dropbox:** share the file ("Anyone with the link") and use that link. The app switches it to a direct download automatically.
+- **Dropbox:** share the file ("Anyone with the link") and use that link. The app turns it into a direct download automatically.
 - **Google Drive:** set the file to "Anyone with the link" and use the share link.
-- **Zip files:** a `.zip` is unpacked, and the ROM inside is kept (requires `unzip` on the TV).
-- **Typing on a TV is slow.** Shorten the link first with a link shortener such as tinyurl and type the short link instead. Short links are followed automatically.
-- Files are saved to `/media/developer/roms` and show up in the list. The app checks the file contents to tell N64 and GBA ROMs apart, and rejects anything else (including web pages returned by a private link).
+- **Zip files:** a `.zip` is unpacked and the ROM inside is kept (needs `unzip` on the TV).
+- **Typing on a TV is slow.** Shorten the link first with a link shortener such as tinyurl, and type the short link instead. Short links are followed automatically.
+- Downloads are saved to `/media/developer/roms`. The app checks the file contents to tell N64 and GBA ROMs apart and rejects anything else, including web pages returned by a private link.
 
-The link must start with `https://`. Only download files you have the right to use.
+The link must start with `https://`.
+
+### Auto-start
+
+Press **Yellow** once to turn it on. Next time you open the app, it starts the last game you played after 3 seconds. Press any key during the countdown to cancel and see the list.
 
 ## Configuration
 
@@ -86,33 +94,29 @@ CORE_PATH_GBA="/path/to/mgba_libretro.so"
 
 | Problem | What to try |
 |---|---|
-| "core not found" message | Install the core from RetroArch (Load Core → Download a Core), or set its path in `n64launcher.conf` (see above) |
+| "core not found" message | Install the core from RetroArch (Load Core → Download a Core), or set its path in `n64launcher.conf` |
+| No ROMs listed | Check the drive format and that files end in `.z64`, `.n64`, `.v64` or `.gba`. Press Red to rescan |
+| "Can't run commands" message | The TV is not rooted, or the root command service is not running. Use the Green key to open RetroArch directly |
 | Download fails or says "web page" | The link is not public. Set sharing to "Anyone with the link" |
-| No ROMs listed | Check the drive format, and that files end in `.z64`, `.n64` or `.v64`. Press Red to rescan |
-| Can't run commands on the TV | The TV is not rooted or the Homebrew Channel is missing. Use the Green key as a fallback |
-| Black screen after launching | Check the log at `/tmp/n64-usb-launcher.log` over SSH and send me its contents |
+| Black screen after launching | Read `/tmp/n64-usb-launcher.log` over SSH, and open an issue with its contents |
 
 ## Feedback
 
-Test reports are welcome, especially the TV model and webOS version where it worked or failed. Open an issue and include those details. Please do not include ROMs, BIOS files, or links to them.
+Test reports are very welcome, especially the TV model and webOS version where it worked or failed. Open an issue and include those details. Please do not include ROMs, BIOS files, or links to them.
 
-The app runs commands as root through the Homebrew Channel, so only install it from this repository or sources you trust.
-
-## Repository layout
-
-```
-api/apps.json    Repository index read by the Homebrew Channel
-ipks/            Packaged .ipk files
-icon.png         App icon
-```
-
-## Trademarks and affiliation
-
-This is an independent project. It is **not affiliated with, sponsored by, or endorsed by** Nintendo, LG Electronics, libretro/RetroArch, or the webOS Homebrew Project. All names and trademarks belong to their respective owners and are used only to describe compatibility.
+REPO launcher runs commands as root on your TV, so only install it from this repository's Releases page.
 
 ## Risks of rooting
 
 Rooting a TV may void its warranty, and firmware updates can remove root access. This project does not provide support for the rooting process.
+
+## Credits
+
+Emulation is done by [RetroArch](https://www.retroarch.com/) and the libretro cores Mupen64Plus-Next and mGBA, which are separate projects with their own licenses and are not part of this repository.
+
+## Trademarks and affiliation
+
+This is an independent project. It is **not affiliated with, sponsored by, or endorsed by** Nintendo, LG Electronics, libretro/RetroArch, or the webOS Homebrew Project. All names and trademarks belong to their respective owners and are used only to describe compatibility.
 
 ## License
 
@@ -120,4 +124,4 @@ Copyright (c) 2026 ruubr337. All rights reserved.
 
 You may install and use this app for personal, non-commercial purposes. You may not redistribute, modify, or sell it without written permission. The software is provided "as is", without warranty of any kind.
 
-This is not open-source software. RetroArch and the emulator cores are separate projects with their own licenses and are not part of this repository.
+This is not open-source software.
